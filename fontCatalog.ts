@@ -1,0 +1,181 @@
+export type FontCategory = "sans" | "serif" | "display";
+export type Tone = "neutral" | "expressive";
+
+export type FontMeta = {
+  family: string;
+  category: FontCategory;
+  weights: number[];
+  tone: Tone;
+  /**
+   * Intended for 14–16px usage; this is about “body suitability”, not aesthetics.
+   */
+  bodyReadability: "high" | "medium" | "low";
+  numerals: "clean" | "stylized";
+  spacing: "stable" | "variable";
+  openSource: true;
+};
+
+const OS = true as const;
+
+export const FONT_CATALOG: Record<string, FontMeta> = {
+  // Body-safe, neutral sans (UI/SaaS defaults)
+  Inter: {
+    family: "Inter",
+    category: "sans",
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    tone: "neutral",
+    bodyReadability: "high",
+    numerals: "clean",
+    spacing: "stable",
+    openSource: OS,
+  },
+  "Source Sans 3": {
+    family: "Source Sans 3",
+    category: "sans",
+    weights: [200, 300, 400, 500, 600, 700, 800, 900],
+    tone: "neutral",
+    bodyReadability: "high",
+    numerals: "clean",
+    spacing: "stable",
+    openSource: OS,
+  },
+  Roboto: {
+    family: "Roboto",
+    category: "sans",
+    weights: [100, 300, 400, 500, 700, 900],
+    tone: "neutral",
+    bodyReadability: "high",
+    numerals: "clean",
+    spacing: "stable",
+    openSource: OS,
+  },
+  "IBM Plex Sans": {
+    family: "IBM Plex Sans",
+    category: "sans",
+    weights: [100, 200, 300, 400, 500, 600, 700],
+    tone: "neutral",
+    bodyReadability: "high",
+    numerals: "clean",
+    spacing: "stable",
+    openSource: OS,
+  },
+  "Work Sans": {
+    family: "Work Sans",
+    category: "sans",
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    tone: "neutral",
+    bodyReadability: "high",
+    numerals: "clean",
+    spacing: "stable",
+    openSource: OS,
+  },
+  "Noto Sans": {
+    family: "Noto Sans",
+    category: "sans",
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    tone: "neutral",
+    bodyReadability: "high",
+    numerals: "clean",
+    spacing: "stable",
+    openSource: OS,
+  },
+
+  // Serif body (editorial/luxury only)
+  "Source Serif 4": {
+    family: "Source Serif 4",
+    category: "serif",
+    weights: [200, 300, 400, 500, 600, 700, 800, 900],
+    tone: "neutral",
+    bodyReadability: "high",
+    numerals: "clean",
+    spacing: "stable",
+    openSource: OS,
+  },
+
+  // Title fonts (expressive / hierarchy defining)
+  "Playfair Display": {
+    family: "Playfair Display",
+    category: "serif",
+    weights: [400, 500, 600, 700, 800, 900],
+    tone: "expressive",
+    bodyReadability: "low",
+    numerals: "stylized",
+    spacing: "variable",
+    openSource: OS,
+  },
+  "DM Serif Display": {
+    family: "DM Serif Display",
+    category: "serif",
+    weights: [400],
+    tone: "expressive",
+    bodyReadability: "low",
+    numerals: "stylized",
+    spacing: "variable",
+    openSource: OS,
+  },
+  Fraunces: {
+    family: "Fraunces",
+    category: "serif",
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    tone: "expressive",
+    bodyReadability: "medium",
+    numerals: "stylized",
+    spacing: "variable",
+    openSource: OS,
+  },
+  "Space Grotesk": {
+    family: "Space Grotesk",
+    category: "sans",
+    weights: [300, 400, 500, 600, 700],
+    tone: "expressive",
+    bodyReadability: "medium",
+    numerals: "clean",
+    spacing: "stable",
+    openSource: OS,
+  },
+  "DM Sans": {
+    family: "DM Sans",
+    category: "sans",
+    weights: [400, 500, 600, 700],
+    tone: "neutral",
+    bodyReadability: "high",
+    numerals: "clean",
+    spacing: "stable",
+    openSource: OS,
+  },
+  "Montserrat": {
+    family: "Montserrat",
+    category: "sans",
+    weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+    tone: "expressive",
+    bodyReadability: "medium",
+    numerals: "clean",
+    spacing: "stable",
+    openSource: OS,
+  },
+  "Bebas Neue": {
+    family: "Bebas Neue",
+    category: "display",
+    weights: [400],
+    tone: "expressive",
+    bodyReadability: "low",
+    numerals: "stylized",
+    spacing: "variable",
+    openSource: OS,
+  },
+  "Oswald": {
+    family: "Oswald",
+    category: "display",
+    weights: [200, 300, 400, 500, 600, 700],
+    tone: "expressive",
+    bodyReadability: "low",
+    numerals: "clean",
+    spacing: "variable",
+    openSource: OS,
+  },
+};
+
+export function getFontMeta(family: string): FontMeta | undefined {
+  return FONT_CATALOG[family];
+}
+

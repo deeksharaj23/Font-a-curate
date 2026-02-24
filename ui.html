@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Font-a-curate</title>
+    <style>
+      :root {
+        --pad: 14px;
+        --bg: #ffffff;
+        --text: #111827;
+        --muted: #6b7280;
+        --border: rgba(17, 24, 39, 0.12);
+        --chip: rgba(17, 24, 39, 0.06);
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji",
+          "Segoe UI Emoji";
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .app {
+        display: grid;
+      }
+
+      .top {
+        padding: var(--pad);
+        display: grid;
+        gap: 4px;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+
+      .header {
+        display: grid;
+        gap: 4px;
+      }
+
+      .title {
+        font-size: 14px;
+        font-weight: 650;
+        letter-spacing: 0.2px;
+      }
+
+      .subtitle {
+        font-size: 12px;
+        color: var(--muted);
+        line-height: 1.3;
+      }
+
+      .filters {
+        display: grid;
+        gap: 10px;
+        grid-template-columns: 1fr 1fr;
+        margin-top: 10px;
+      }
+
+      .filter {
+        display: grid;
+        gap: 6px;
+      }
+
+      .label {
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      select {
+        width: 100%;
+        font-size: 12px;
+        padding: 8px 10px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: #fff;
+        color: var(--text);
+        outline: none;
+      }
+
+      .count {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 10px;
+      }
+
+      .grid {
+        padding: var(--pad);
+        padding-top: 12px;
+        display: grid;
+        gap: 12px;
+        padding-bottom: 10px;
+      }
+
+      .tile {
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        overflow: hidden;
+        background: #fff;
+      }
+
+      .preview {
+        padding: 14px 14px 12px 14px;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .previewTitle {
+        font-size: 38px;
+        line-height: 1.05;
+        letter-spacing: -0.02em;
+        margin: 0 0 10px 0;
+      }
+
+      .previewBody {
+        font-size: 15px;
+        line-height: 1.45;
+        margin: 0;
+        color: rgba(17, 24, 39, 0.92);
+      }
+
+      .meta {
+        padding: 12px 14px 14px 14px;
+        display: grid;
+        gap: 10px;
+      }
+
+      .names {
+        display: grid;
+        gap: 4px;
+      }
+
+      .nameRow {
+        display: grid;
+        grid-template-columns: 52px 1fr;
+        gap: 10px;
+        font-size: 12px;
+      }
+
+      .nameRow span:first-child {
+        color: var(--muted);
+      }
+
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .tag {
+        font-size: 11px;
+        padding: 5px 8px;
+        border-radius: 999px;
+        background: var(--chip);
+        color: rgba(17, 24, 39, 0.86);
+      }
+
+      .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      button {
+        font-size: 12px;
+        padding: 9px 12px;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        background: #111827;
+        color: white;
+        cursor: pointer;
+      }
+
+      button:active {
+        transform: translateY(1px);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <div class="top">
+        <div class="header">
+          <div class="title">Font-a-curate</div>
+          <div class="subtitle">A curated typography pairing system</div>
+        </div>
+
+        <div class="filters">
+          <div class="filter">
+            <div class="label">Use case</div>
+            <select id="useCase"></select>
+          </div>
+          <div class="filter">
+            <div class="label">Structure</div>
+            <select id="structure"></select>
+          </div>
+          <div class="filter">
+            <div class="label">Readability</div>
+            <select id="readability"></select>
+          </div>
+          <div class="filter">
+            <div class="label">Contrast</div>
+            <select id="contrast"></select>
+          </div>
+        </div>
+
+        <div class="count" id="count">Loading curated pairs…</div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+    </div>
+
+    <script>
+      const ALL = "All";
+
+      /** @type {{ pairs: any[], filters: { useCase: string, structure: string, readability: string, contrast: string } }} */
+      const state = {
+        pairs: [],
+        filters: { useCase: ALL, structure: ALL, readability: ALL, contrast: ALL },
+      };
+
+      const loadedFamilies = new Set();
+
+      function toFamilyParam(family) {
+        // Google Fonts CSS2 family param prefers + for spaces.
+        return encodeURIComponent(family).replace(/%20/g, "+");
+      }
+
+      function ensureFontsLoaded(titleFont, bodyFont) {
+        const missing = [];
+        if (!loadedFamilies.has(titleFont)) missing.push(titleFont);
+        if (!loadedFamilies.has(bodyFont)) missing.push(bodyFont);
+        if (missing.length === 0) return;
+
+        missing.forEach((f) => loadedFamilies.add(f));
+
+        const url =
+          "https://fonts.googleapis.com/css2?" +
+          missing.map((f) => "family=" + toFamilyParam(f)).join("&") +
+          "&display=swap";
+
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = url;
+        document.head.appendChild(link);
+      }
+
+      function setOptions(selectEl, options) {
+        selectEl.innerHTML = options.map((o) => `<option value="${o}">${o}</option>`).join("");
+      }
+
+      function initFilters() {
+        setOptions(document.getElementById("useCase"), [ALL, "ui", "saas", "branding", "editorial", "marketing", "luxury"]);
+        setOptions(document.getElementById("structure"), [ALL, "serif-sans", "sans-sans", "serif-serif", "display-sans"]);
+        setOptions(document.getElementById("readability"), [ALL, "high", "medium", "expressive"]);
+        setOptions(document.getElementById("contrast"), [ALL, "low", "medium", "high"]);
+
+        ["useCase", "structure", "readability", "contrast"].forEach((id) => {
+          document.getElementById(id).addEventListener("change", (e) => {
+            state.filters[id] = e.target.value;
+            render();
+          });
+        });
+      }
+
+      function matchesAllFilters(pair) {
+        const f = state.filters;
+        if (f.useCase !== ALL && pair.useCase !== f.useCase) return false;
+        if (f.structure !== ALL && pair.structure !== f.structure) return false;
+        if (f.readability !== ALL && pair.readability !== f.readability) return false;
+        if (f.contrast !== ALL && pair.contrast !== f.contrast) return false;
+        return true;
+      }
+
+      function escapeHtmlAttr(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/"/g, "&quot;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
+      function cssFontFamily(family) {
+        // Use single quotes so the style="" attribute stays valid.
+        const safe = String(family).replace(/'/g, "\\'");
+        return `'${safe}', ui-sans-serif, system-ui`;
+      }
+
+      function render() {
+        const grid = document.getElementById("grid");
+        const filtered = state.pairs.filter(matchesAllFilters);
+        document.getElementById("count").textContent = `${filtered.length} pairing${filtered.length === 1 ? "" : "s"}`;
+
+        grid.innerHTML = filtered
+          .map((pair) => {
+            ensureFontsLoaded(pair.titleFont, pair.bodyFont);
+            const titleStyle = `font-family: ${cssFontFamily(pair.titleFont)};`;
+            const bodyStyle = `font-family: ${cssFontFamily(pair.bodyFont)};`;
+            const titleAttr = escapeHtmlAttr(pair.titleFont);
+            const bodyAttr = escapeHtmlAttr(pair.bodyFont);
+
+            return `
+              <div class="tile">
+                <div class="preview">
+                  <div class="previewTitle" style="${titleStyle}">Typography System</div>
+                  <p class="previewBody" style="${bodyStyle}">
+                    A short placeholder paragraph to preview rhythm, spacing, and readability at body size.
+                  </p>
+                </div>
+                <div class="meta">
+                  <div class="names">
+                    <div class="nameRow"><span>Title</span><span>${pair.titleFont}</span></div>
+                    <div class="nameRow"><span>Body</span><span>${pair.bodyFont}</span></div>
+                  </div>
+                  <div class="tags">
+                    <span class="tag">${pair.useCase}</span>
+                    <span class="tag">${pair.structure}</span>
+                  </div>
+                  <div class="actions">
+                    <button data-action="add" data-title="${titleAttr}" data-body="${bodyAttr}">Add to canvas</button>
+                    <button data-action="applyToText" data-title="${titleAttr}" data-body="${bodyAttr}">Apply to text</button>
+                  </div>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      document.getElementById("grid").addEventListener("click", (e) => {
+        const btn = e.target.closest('button[data-action]');
+        if (!btn) return;
+        const titleFont = btn.getAttribute("data-title");
+        const bodyFont = btn.getAttribute("data-body");
+        const action = btn.getAttribute("data-action");
+        if (action === "add") {
+          parent.postMessage({ pluginMessage: { type: "ADD_TO_CANVAS", titleFont, bodyFont } }, "*");
+          return;
+        }
+        if (action === "applyToText") {
+          parent.postMessage({ pluginMessage: { type: "APPLY_TO_TEXT", titleFont, bodyFont } }, "*");
+        }
+      });
+
+      window.onmessage = (event) => {
+        const msg = event.data.pluginMessage;
+        if (!msg) return;
+
+        if (msg.type === "PAIRS") {
+          state.pairs = msg.pairs || [];
+          render();
+        }
+      };
+
+      initFilters();
+      parent.postMessage({ pluginMessage: { type: "REQUEST_PAIRS" } }, "*");
+    </script>
+  </body>
+</html>
