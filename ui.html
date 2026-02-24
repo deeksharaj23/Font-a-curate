@@ -13,6 +13,10 @@
         --muted: #6b7280;
         --border: rgba(17, 24, 39, 0.12);
         --chip: rgba(17, 24, 39, 0.06);
+        --accent: #7c3aed;
+        --accentHover: #6d28d9;
+        --accentSoft: rgba(124, 58, 237, 0.14);
+        --accentSoftStrong: rgba(124, 58, 237, 0.24);
       }
 
       body {
@@ -78,13 +82,13 @@
       }
 
       select:hover {
-        border-color: rgba(17, 24, 39, 0.2);
-        background-color: rgba(17, 24, 39, 0.01);
+        border-color: rgba(124, 58, 237, 0.35);
+        background-color: rgba(124, 58, 237, 0.02);
       }
 
       select:focus {
-        border-color: rgba(17, 24, 39, 0.28);
-        box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accentSoft);
       }
 
       .previewControl {
@@ -113,13 +117,13 @@
       }
 
       input.previewInput:hover {
-        border-color: rgba(17, 24, 39, 0.2);
-        background-color: rgba(17, 24, 39, 0.01);
+        border-color: rgba(124, 58, 237, 0.35);
+        background-color: rgba(124, 58, 237, 0.02);
       }
 
       input.previewInput:focus {
-        border-color: rgba(17, 24, 39, 0.28);
-        box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px var(--accentSoft);
       }
 
       .grid {
@@ -160,8 +164,8 @@
       }
 
       .tile:hover {
-        border-color: rgba(17, 24, 39, 0.16);
-        box-shadow: 0 6px 20px rgba(17, 24, 39, 0.08);
+        border-color: rgba(124, 58, 237, 0.18);
+        box-shadow: 0 10px 24px rgba(17, 24, 39, 0.08);
         transform: translateY(-1px);
       }
 
@@ -246,8 +250,8 @@
         font-size: 12px;
         padding: 8px 12px;
         border-radius: 999px;
-        border: 1px solid rgba(17, 24, 39, 0.12);
-        background: #111827;
+        border: 1px solid var(--accent);
+        background: var(--accent);
         color: #ffffff;
         cursor: pointer;
         letter-spacing: 0.1px;
@@ -258,11 +262,13 @@
       button.secondary {
         background: #ffffff;
         color: rgba(17, 24, 39, 0.92);
+        border-color: rgba(17, 24, 39, 0.14);
       }
 
       button:hover {
-        filter: brightness(1.03);
-        box-shadow: 0 6px 16px rgba(17, 24, 39, 0.12);
+        background: var(--accentHover);
+        border-color: var(--accentHover);
+        box-shadow: 0 10px 22px rgba(124, 58, 237, 0.22);
       }
 
       button:active {
@@ -270,13 +276,14 @@
       }
 
       button.secondary:hover {
-        border-color: rgba(17, 24, 39, 0.18);
-        background-color: rgba(17, 24, 39, 0.02);
+        background-color: rgba(124, 58, 237, 0.04);
+        border-color: rgba(124, 58, 237, 0.35);
+        box-shadow: 0 8px 18px rgba(17, 24, 39, 0.08);
       }
 
       button:focus {
         outline: none;
-        box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.12);
+        box-shadow: 0 0 0 3px var(--accentSoftStrong);
       }
     </style>
   </head>
@@ -329,8 +336,8 @@
 
     <script>
       const ALL = "All";
-      const DEFAULT_TITLE = "Typography System";
-      const DEFAULT_BODY = "A short placeholder paragraph to preview rhythm, spacing, and readability at body size.";
+      const DEFAULT_BODY =
+        "The perfect title and body font pair is when two fonts work together to create clear hierarchy, balance, and visual harmony in a design.";
 
       /** @type {{ pairs: any[], filters: { useCase: string, structure: string, readability: string, contrast: string } }} */
       const state = {
@@ -440,8 +447,6 @@
 
         const customTitle = String(state.previewTitleText || "").trim();
         const customBody = String(state.previewBodyText || "").trim();
-        const previewTitle = customTitle || DEFAULT_TITLE;
-        const previewBody = customBody || DEFAULT_BODY;
 
         grid.innerHTML = filtered
           .map((pair) => {
@@ -450,6 +455,8 @@
             const bodyStyle = `font-family: ${cssFontFamily(pair.bodyFont)};`;
             const titleAttr = escapeHtmlAttr(pair.titleFont);
             const bodyAttr = escapeHtmlAttr(pair.bodyFont);
+            const previewTitle = customTitle || `${pair.titleFont} & ${pair.bodyFont}`;
+            const previewBody = customBody || DEFAULT_BODY;
 
             return `
               <div class="tile">
@@ -471,8 +478,8 @@
                     </div>
                   </div>
                   <div class="actions">
-                    <button class="secondary" data-action="applyToText" data-title="${titleAttr}" data-body="${bodyAttr}">Apply to text</button>
-                    <button data-action="add" data-title="${titleAttr}" data-body="${bodyAttr}">Add to canvas</button>
+                    <button class="secondary" data-action="add" data-title="${titleAttr}" data-body="${bodyAttr}">Add to canvas</button>
+                    <button data-action="applyToText" data-title="${titleAttr}" data-body="${bodyAttr}">Apply to text</button>
                   </div>
                 </div>
               </div>
@@ -488,7 +495,18 @@
         const bodyFont = btn.getAttribute("data-body");
         const action = btn.getAttribute("data-action");
         if (action === "add") {
-          parent.postMessage({ pluginMessage: { type: "ADD_TO_CANVAS", titleFont, bodyFont } }, "*");
+          parent.postMessage(
+            {
+              pluginMessage: {
+                type: "ADD_TO_CANVAS",
+                titleFont,
+                bodyFont,
+                titleText: state.previewTitleText || "",
+                bodyText: state.previewBodyText || "",
+              },
+            },
+            "*"
+          );
           return;
         }
         if (action === "applyToText") {

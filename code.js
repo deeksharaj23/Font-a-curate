@@ -315,6 +315,204 @@
       useCase: "saas",
       readability: "high",
       contrast: "low"
+    },
+    {
+      id: "ui-inter-dmsans",
+      titleFont: "DM Sans",
+      bodyFont: "Inter",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "low"
+    },
+    {
+      id: "ui-sourcesans3-spacegrotesk",
+      titleFont: "Space Grotesk",
+      bodyFont: "Source Sans 3",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "medium"
+    },
+    {
+      id: "ui-ibmplexsans-dmsans",
+      titleFont: "DM Sans",
+      bodyFont: "IBM Plex Sans",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "low"
+    },
+    {
+      id: "ui-worksans-montserrat",
+      titleFont: "Montserrat",
+      bodyFont: "Work Sans",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "medium"
+    },
+    {
+      id: "ui-roboto-spacegrotesk",
+      titleFont: "Space Grotesk",
+      bodyFont: "Roboto",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "medium"
+    },
+    {
+      id: "saas-inter-dmsans",
+      titleFont: "DM Sans",
+      bodyFont: "Inter",
+      structure: "sans-sans",
+      useCase: "saas",
+      readability: "high",
+      contrast: "low"
+    },
+    {
+      id: "saas-sourcesans3-montserrat",
+      titleFont: "Montserrat",
+      bodyFont: "Source Sans 3",
+      structure: "sans-sans",
+      useCase: "saas",
+      readability: "high",
+      contrast: "medium"
+    },
+    {
+      id: "saas-ibmplexsans-montserrat",
+      titleFont: "Montserrat",
+      bodyFont: "IBM Plex Sans",
+      structure: "sans-sans",
+      useCase: "saas",
+      readability: "high",
+      contrast: "medium"
+    },
+    {
+      id: "saas-dmsans-worksans",
+      titleFont: "Work Sans",
+      bodyFont: "DM Sans",
+      structure: "sans-sans",
+      useCase: "saas",
+      readability: "high",
+      contrast: "low"
+    },
+    {
+      id: "branding-dmserifdisplay-inter",
+      titleFont: "DM Serif Display",
+      bodyFont: "Inter",
+      structure: "serif-sans",
+      useCase: "branding",
+      readability: "medium",
+      contrast: "high"
+    },
+    {
+      id: "branding-playfair-ibmplexsans",
+      titleFont: "Playfair Display",
+      bodyFont: "IBM Plex Sans",
+      structure: "serif-sans",
+      useCase: "branding",
+      readability: "medium",
+      contrast: "high"
+    },
+    {
+      id: "branding-fraunces-sourcesans3",
+      titleFont: "Fraunces",
+      bodyFont: "Source Sans 3",
+      structure: "serif-sans",
+      useCase: "branding",
+      readability: "medium",
+      contrast: "high"
+    },
+    {
+      id: "branding-playfair-worksans",
+      titleFont: "Playfair Display",
+      bodyFont: "Work Sans",
+      structure: "serif-sans",
+      useCase: "branding",
+      readability: "medium",
+      contrast: "high"
+    },
+    {
+      id: "editorial-playfair-sourceserif4",
+      titleFont: "Playfair Display",
+      bodyFont: "Source Serif 4",
+      structure: "serif-serif",
+      useCase: "editorial",
+      readability: "medium",
+      contrast: "medium"
+    },
+    {
+      id: "editorial-dmserifdisplay-sourceserif4",
+      titleFont: "DM Serif Display",
+      bodyFont: "Source Serif 4",
+      structure: "serif-serif",
+      useCase: "editorial",
+      readability: "medium",
+      contrast: "medium"
+    },
+    {
+      id: "editorial-fraunces-inter",
+      titleFont: "Fraunces",
+      bodyFont: "Inter",
+      structure: "serif-sans",
+      useCase: "editorial",
+      readability: "medium",
+      contrast: "high"
+    },
+    {
+      id: "marketing-oswald-inter",
+      titleFont: "Oswald",
+      bodyFont: "Inter",
+      structure: "display-sans",
+      useCase: "marketing",
+      readability: "medium",
+      contrast: "high"
+    },
+    {
+      id: "marketing-bebasneue-worksans",
+      titleFont: "Bebas Neue",
+      bodyFont: "Work Sans",
+      structure: "display-sans",
+      useCase: "marketing",
+      readability: "medium",
+      contrast: "high"
+    },
+    {
+      id: "marketing-oswald-sourcesans3",
+      titleFont: "Oswald",
+      bodyFont: "Source Sans 3",
+      structure: "display-sans",
+      useCase: "marketing",
+      readability: "medium",
+      contrast: "high"
+    },
+    {
+      id: "marketing-bebasneue-ibmplexsans",
+      titleFont: "Bebas Neue",
+      bodyFont: "IBM Plex Sans",
+      structure: "display-sans",
+      useCase: "marketing",
+      readability: "medium",
+      contrast: "high"
+    },
+    {
+      id: "luxury-playfair-inter",
+      titleFont: "Playfair Display",
+      bodyFont: "Inter",
+      structure: "serif-sans",
+      useCase: "luxury",
+      readability: "medium",
+      contrast: "high"
+    },
+    {
+      id: "luxury-fraunces-sourceserif4",
+      titleFont: "Fraunces",
+      bodyFont: "Source Serif 4",
+      structure: "serif-serif",
+      useCase: "luxury",
+      readability: "medium",
+      contrast: "medium"
     }
   ];
 
@@ -380,6 +578,8 @@
       return;
     }
     const { titleFont, bodyFont } = opts;
+    const titleText = String(opts.titleText || "").trim() || `${titleFont} & ${bodyFont}`;
+    const bodyText = String(opts.bodyText || "").trim() || "The perfect title and body font pair is when two fonts work together to create clear hierarchy, balance, and visual harmony in a design.";
     try {
       await figma.loadFontAsync({ family: titleFont, style: "Regular" });
       await figma.loadFontAsync({ family: bodyFont, style: "Regular" });
@@ -390,11 +590,11 @@
     const title = figma.createText();
     title.fontName = { family: titleFont, style: "Regular" };
     title.fontSize = 40;
-    title.characters = "Typography System";
+    title.characters = titleText;
     const body = figma.createText();
     body.fontName = { family: bodyFont, style: "Regular" };
     body.fontSize = 16;
-    body.characters = "A short placeholder paragraph to preview rhythm, spacing, and overall readability at body size.";
+    body.characters = bodyText;
     title.x = 0;
     title.y = 0;
     body.x = 0;
@@ -493,7 +693,12 @@
       return;
     }
     if (msg.type === "ADD_TO_CANVAS") {
-      await applyPairToCanvas({ titleFont: msg.titleFont, bodyFont: msg.bodyFont });
+      await applyPairToCanvas({
+        titleFont: msg.titleFont,
+        bodyFont: msg.bodyFont,
+        titleText: msg.titleText,
+        bodyText: msg.bodyText
+      });
       return;
     }
     if (msg.type === "APPLY_TO_TEXT") {

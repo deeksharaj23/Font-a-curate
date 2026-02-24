@@ -4,7 +4,7 @@ import type { FontPair, Structure } from "./types";
 
 type UiToPluginMessage =
   | { type: "REQUEST_PAIRS" }
-  | { type: "ADD_TO_CANVAS"; titleFont: string; bodyFont: string }
+  | { type: "ADD_TO_CANVAS"; titleFont: string; bodyFont: string; titleText?: string; bodyText?: string }
   | { type: "APPLY_TO_TEXT"; titleFont: string; bodyFont: string };
 
 type PluginToUiMessage =
@@ -95,13 +95,17 @@ function getCuratedPairs(): FontPair[] {
   return curated;
 }
 
-async function applyPairToCanvas(opts: { titleFont: string; bodyFont: string }) {
+async function applyPairToCanvas(opts: { titleFont: string; bodyFont: string; titleText?: string; bodyText?: string }) {
   if (figma.editorType !== "figma") {
     figma.notify("This plugin v1 applies pairings in Figma files only.");
     return;
   }
 
   const { titleFont, bodyFont } = opts;
+  const titleText = String(opts.titleText || "").trim() || `${titleFont} & ${bodyFont}`;
+  const bodyText =
+    String(opts.bodyText || "").trim() ||
+    "The perfect title and body font pair is when two fonts work together to create clear hierarchy, balance, and visual harmony in a design.";
 
   try {
     await figma.loadFontAsync({ family: titleFont, style: "Regular" });
@@ -114,13 +118,12 @@ async function applyPairToCanvas(opts: { titleFont: string; bodyFont: string }) 
   const title = figma.createText();
   title.fontName = { family: titleFont, style: "Regular" };
   title.fontSize = 40;
-  title.characters = "Typography System";
+  title.characters = titleText;
 
   const body = figma.createText();
   body.fontName = { family: bodyFont, style: "Regular" };
   body.fontSize = 16;
-  body.characters =
-    "A short placeholder paragraph to preview rhythm, spacing, and overall readability at body size.";
+  body.characters = bodyText;
 
   title.x = 0;
   title.y = 0;
@@ -250,7 +253,12 @@ figma.ui.onmessage = async (msg: UiToPluginMessage) => {
   }
 
   if (msg.type === "ADD_TO_CANVAS") {
-    await applyPairToCanvas({ titleFont: msg.titleFont, bodyFont: msg.bodyFont });
+    await applyPairToCanvas({
+      titleFont: msg.titleFont,
+      bodyFont: msg.bodyFont,
+      titleText: msg.titleText,
+      bodyText: msg.bodyText,
+    });
     return;
   }
 
