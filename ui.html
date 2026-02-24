@@ -7,7 +7,8 @@
     <style>
       :root {
         --pad: 14px;
-        --bg: #ffffff;
+        --bg: #f6f7fb;
+        --surface: #ffffff;
         --text: #111827;
         --muted: #6b7280;
         --border: rgba(17, 24, 39, 0.12);
@@ -28,65 +29,97 @@
       }
 
       .top {
-        padding: var(--pad);
+        padding: 10px var(--pad) 10px var(--pad);
         display: grid;
-        gap: 4px;
-        background: var(--bg);
-        border-bottom: 1px solid var(--border);
+        gap: 8px;
+        background: var(--surface);
+        border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+        box-shadow: 0 2px 10px rgba(17, 24, 39, 0.06);
         position: sticky;
         top: 0;
         z-index: 10;
       }
 
-      .header {
+      .filters {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .filter {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .label {
+        display: block;
+        font-size: 10.5px;
+        color: var(--muted);
+        margin: 0 0 4px 2px;
+      }
+
+      select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        width: 100%;
+        font-size: 12px;
+        padding: 9px 34px 9px 12px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background-color: #fff;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 20 20'%3E%3Cpath fill='%236b7280' d='M5.6 7.9a1 1 0 0 1 1.4 0L10 10.9l3-3a1 1 0 1 1 1.4 1.4l-3.7 3.7a1 1 0 0 1-1.4 0L5.6 9.3a1 1 0 0 1 0-1.4z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 12px center;
+        background-size: 16px 16px;
+        color: var(--text);
+        outline: none;
+        transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
+      }
+
+      select:hover {
+        border-color: rgba(17, 24, 39, 0.2);
+        background-color: rgba(17, 24, 39, 0.01);
+      }
+
+      select:focus {
+        border-color: rgba(17, 24, 39, 0.28);
+        box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+      }
+
+      .previewControl {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+      }
+
+      .previewField {
+        flex: 1;
+        min-width: 0;
         display: grid;
         gap: 4px;
       }
 
-      .title {
-        font-size: 14px;
-        font-weight: 650;
-        letter-spacing: 0.2px;
-      }
-
-      .subtitle {
-        font-size: 12px;
-        color: var(--muted);
-        line-height: 1.3;
-      }
-
-      .filters {
-        display: grid;
-        gap: 10px;
-        grid-template-columns: 1fr 1fr;
-        margin-top: 10px;
-      }
-
-      .filter {
-        display: grid;
-        gap: 6px;
-      }
-
-      .label {
-        font-size: 11px;
-        color: var(--muted);
-      }
-
-      select {
+      input.previewInput {
         width: 100%;
         font-size: 12px;
-        padding: 8px 10px;
+        padding: 8px 12px;
         border: 1px solid var(--border);
         border-radius: 10px;
         background: #fff;
         color: var(--text);
         outline: none;
+        transition: border-color 120ms ease, box-shadow 120ms ease, background-color 120ms ease;
       }
 
-      .count {
-        font-size: 12px;
-        color: var(--muted);
-        margin-top: 10px;
+      input.previewInput:hover {
+        border-color: rgba(17, 24, 39, 0.2);
+        background-color: rgba(17, 24, 39, 0.01);
+      }
+
+      input.previewInput:focus {
+        border-color: rgba(17, 24, 39, 0.28);
+        box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
       }
 
       .grid {
@@ -97,47 +130,78 @@
         padding-bottom: 10px;
       }
 
-      .tile {
-        border: 1px solid var(--border);
+      .emptyState {
+        border: 1px dashed var(--border);
         border-radius: 14px;
+        padding: 18px 14px;
+        color: var(--muted);
+        text-align: center;
+        line-height: 1.35;
+      }
+
+      .emptyStateTitle {
+        font-size: 13px;
+        font-weight: 650;
+        color: rgba(17, 24, 39, 0.82);
+        margin-bottom: 4px;
+      }
+
+      .emptyStateBody {
+        font-size: 12px;
+      }
+
+      .tile {
+        border: 1px solid rgba(17, 24, 39, 0.1);
+        border-radius: 12px;
         overflow: hidden;
         background: #fff;
+        box-shadow: 0 1px 2px rgba(17, 24, 39, 0.06);
+        transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease;
+      }
+
+      .tile:hover {
+        border-color: rgba(17, 24, 39, 0.16);
+        box-shadow: 0 6px 20px rgba(17, 24, 39, 0.08);
+        transform: translateY(-1px);
       }
 
       .preview {
-        padding: 14px 14px 12px 14px;
-        border-bottom: 1px solid var(--border);
+        padding: 12px 12px 10px 12px;
+        border-bottom: 1px solid rgba(17, 24, 39, 0.08);
       }
 
       .previewTitle {
-        font-size: 38px;
+        font-size: 34px;
         line-height: 1.05;
         letter-spacing: -0.02em;
-        margin: 0 0 10px 0;
+        margin: 0 0 8px 0;
       }
 
       .previewBody {
-        font-size: 15px;
+        font-size: 14px;
         line-height: 1.45;
         margin: 0;
         color: rgba(17, 24, 39, 0.92);
       }
 
       .meta {
-        padding: 12px 14px 14px 14px;
-        display: grid;
+        padding: 10px 12px 12px 12px;
+        display: flex;
+        align-items: flex-end;
+        justify-content: space-between;
         gap: 10px;
       }
 
       .names {
         display: grid;
-        gap: 4px;
+        gap: 3px;
+        min-width: 0;
       }
 
       .nameRow {
         display: grid;
-        grid-template-columns: 52px 1fr;
-        gap: 10px;
+        grid-template-columns: 44px 1fr;
+        gap: 8px;
         font-size: 12px;
       }
 
@@ -145,69 +209,119 @@
         color: var(--muted);
       }
 
+      .nameRow span:last-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
       .tags {
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
+        margin-top: 8px;
       }
 
       .tag {
         font-size: 11px;
-        padding: 5px 8px;
+        padding: 4px 8px;
         border-radius: 999px;
         background: var(--chip);
         color: rgba(17, 24, 39, 0.86);
+        transition: background-color 120ms ease, color 120ms ease;
+      }
+
+      .tile:hover .tag {
+        background: rgba(17, 24, 39, 0.08);
       }
 
       .actions {
         display: flex;
         justify-content: flex-end;
-        gap: 10px;
+        gap: 8px;
+        flex-shrink: 0;
       }
 
       button {
         font-size: 12px;
-        padding: 9px 12px;
-        border-radius: 10px;
-        border: 1px solid var(--border);
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid rgba(17, 24, 39, 0.12);
         background: #111827;
-        color: white;
+        color: #ffffff;
         cursor: pointer;
+        letter-spacing: 0.1px;
+        transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease, background-color 120ms ease,
+          border-color 120ms ease;
+      }
+
+      button.secondary {
+        background: #ffffff;
+        color: rgba(17, 24, 39, 0.92);
+      }
+
+      button:hover {
+        filter: brightness(1.03);
+        box-shadow: 0 6px 16px rgba(17, 24, 39, 0.12);
       }
 
       button:active {
         transform: translateY(1px);
+      }
+
+      button.secondary:hover {
+        border-color: rgba(17, 24, 39, 0.18);
+        background-color: rgba(17, 24, 39, 0.02);
+      }
+
+      button:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.12);
       }
     </style>
   </head>
   <body>
     <div class="app">
       <div class="top">
-        <div class="header">
-          <div class="title">Font-a-curate</div>
-          <div class="subtitle">A curated typography pairing system</div>
-        </div>
-
         <div class="filters">
           <div class="filter">
             <div class="label">Use case</div>
-            <select id="useCase"></select>
+            <select id="useCase" aria-label="Use case"></select>
           </div>
           <div class="filter">
             <div class="label">Structure</div>
-            <select id="structure"></select>
+            <select id="structure" aria-label="Structure"></select>
           </div>
           <div class="filter">
             <div class="label">Readability</div>
-            <select id="readability"></select>
+            <select id="readability" aria-label="Readability"></select>
           </div>
           <div class="filter">
             <div class="label">Contrast</div>
-            <select id="contrast"></select>
+            <select id="contrast" aria-label="Contrast"></select>
           </div>
         </div>
 
-        <div class="count" id="count">Loading curated pairs…</div>
+        <div class="previewControl">
+          <div class="previewField">
+            <div class="label">Title</div>
+            <input
+              class="previewInput"
+              id="previewTitle"
+              type="text"
+              autocomplete="off"
+            />
+          </div>
+          <div class="previewField">
+            <div class="label">Body</div>
+            <input
+              class="previewInput"
+              id="previewBody"
+              type="text"
+              autocomplete="off"
+            />
+          </div>
+        </div>
       </div>
 
       <div class="grid" id="grid"></div>
@@ -215,11 +329,15 @@
 
     <script>
       const ALL = "All";
+      const DEFAULT_TITLE = "Typography System";
+      const DEFAULT_BODY = "A short placeholder paragraph to preview rhythm, spacing, and readability at body size.";
 
       /** @type {{ pairs: any[], filters: { useCase: string, structure: string, readability: string, contrast: string } }} */
       const state = {
         pairs: [],
         filters: { useCase: ALL, structure: ALL, readability: ALL, contrast: ALL },
+        previewTitleText: "",
+        previewBodyText: "",
       };
 
       const loadedFamilies = new Set();
@@ -264,6 +382,16 @@
             render();
           });
         });
+
+        document.getElementById("previewTitle").addEventListener("input", (e) => {
+          state.previewTitleText = e.target.value || "";
+          render();
+        });
+
+        document.getElementById("previewBody").addEventListener("input", (e) => {
+          state.previewBodyText = e.target.value || "";
+          render();
+        });
       }
 
       function matchesAllFilters(pair) {
@@ -283,6 +411,13 @@
           .replace(/>/g, "&gt;");
       }
 
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+      }
+
       function cssFontFamily(family) {
         // Use single quotes so the style="" attribute stays valid.
         const safe = String(family).replace(/'/g, "\\'");
@@ -292,7 +427,21 @@
       function render() {
         const grid = document.getElementById("grid");
         const filtered = state.pairs.filter(matchesAllFilters);
-        document.getElementById("count").textContent = `${filtered.length} pairing${filtered.length === 1 ? "" : "s"}`;
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `
+            <div class="emptyState">
+              <div class="emptyStateTitle">No pairings found</div>
+              <div class="emptyStateBody">Try setting one or more filters back to “All”.</div>
+            </div>
+          `;
+          return;
+        }
+
+        const customTitle = String(state.previewTitleText || "").trim();
+        const customBody = String(state.previewBodyText || "").trim();
+        const previewTitle = customTitle || DEFAULT_TITLE;
+        const previewBody = customBody || DEFAULT_BODY;
 
         grid.innerHTML = filtered
           .map((pair) => {
@@ -305,23 +454,25 @@
             return `
               <div class="tile">
                 <div class="preview">
-                  <div class="previewTitle" style="${titleStyle}">Typography System</div>
+                  <div class="previewTitle" style="${titleStyle}">${escapeHtml(previewTitle)}</div>
                   <p class="previewBody" style="${bodyStyle}">
-                    A short placeholder paragraph to preview rhythm, spacing, and readability at body size.
+                    ${escapeHtml(previewBody)}
                   </p>
                 </div>
                 <div class="meta">
-                  <div class="names">
-                    <div class="nameRow"><span>Title</span><span>${pair.titleFont}</span></div>
-                    <div class="nameRow"><span>Body</span><span>${pair.bodyFont}</span></div>
-                  </div>
-                  <div class="tags">
-                    <span class="tag">${pair.useCase}</span>
-                    <span class="tag">${pair.structure}</span>
+                  <div>
+                    <div class="names">
+                      <div class="nameRow"><span>Title</span><span>${pair.titleFont}</span></div>
+                      <div class="nameRow"><span>Body</span><span>${pair.bodyFont}</span></div>
+                    </div>
+                    <div class="tags">
+                      <span class="tag">${pair.useCase}</span>
+                      <span class="tag">${pair.structure}</span>
+                    </div>
                   </div>
                   <div class="actions">
+                    <button class="secondary" data-action="applyToText" data-title="${titleAttr}" data-body="${bodyAttr}">Apply to text</button>
                     <button data-action="add" data-title="${titleAttr}" data-body="${bodyAttr}">Add to canvas</button>
-                    <button data-action="applyToText" data-title="${titleAttr}" data-body="${bodyAttr}">Apply to text</button>
                   </div>
                 </div>
               </div>
