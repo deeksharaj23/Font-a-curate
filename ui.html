@@ -163,6 +163,68 @@
         align-items: flex-end;
       }
 
+      .previewToggleRow {
+        display: flex;
+        align-items: center;
+      }
+
+      .sectionDivider {
+        height: 1px;
+        background: rgba(17, 24, 39, 0.08);
+        margin: 2px 0 0 0;
+      }
+
+      .previewToggle {
+        width: fit-content;
+        text-align: left;
+        font-size: 12px;
+        padding: 4px 2px;
+        border: none;
+        border-radius: 10px;
+        background: transparent;
+        color: rgba(17, 24, 39, 0.88);
+        cursor: pointer;
+        font-weight: 400;
+        letter-spacing: 0.01em;
+        transition: color 140ms ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .previewToggle:hover {
+        color: var(--accent);
+        background: transparent;
+        border-color: transparent;
+        box-shadow: none;
+      }
+
+      .previewToggle:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--accentSoft);
+      }
+
+      .previewToggle[aria-expanded="true"] {
+        color: var(--accent);
+        background: transparent;
+        border-color: transparent;
+        box-shadow: none;
+      }
+
+      .previewWrap {
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-6px);
+        transition: max-height 240ms ease, opacity 180ms ease, transform 240ms ease;
+      }
+
+      .previewWrap.open {
+        max-height: 140px;
+        opacity: 1;
+        transform: translateY(0);
+      }
+
       .previewField {
         flex: 1;
         min-width: 0;
@@ -254,7 +316,6 @@
 
       .preview {
         padding: 12px 12px 10px 12px;
-        border-bottom: 1px solid rgba(17, 24, 39, 0.08);
       }
 
       .previewTitle {
@@ -277,6 +338,12 @@
         -webkit-line-clamp: 3;
         -webkit-box-orient: vertical;
         overflow: hidden;
+      }
+
+      .tileDivider {
+        height: 1px;
+        background: rgba(17, 24, 39, 0.08);
+        margin: 0 12px;
       }
 
       .meta {
@@ -317,6 +384,10 @@
         margin-top: 8px;
       }
 
+      .previewTags {
+        margin-top: 10px;
+      }
+
       .tag {
         font-size: 11px;
         padding: 4px 8px;
@@ -337,7 +408,7 @@
         flex-shrink: 0;
       }
 
-      button {
+      .actions button {
         font-size: 12px;
         padding: 8px 12px;
         border-radius: 999px;
@@ -350,29 +421,29 @@
           border-color 120ms ease;
       }
 
-      button.secondary {
+      .actions button.secondary {
         background: #ffffff;
         color: rgba(17, 24, 39, 0.92);
         border-color: rgba(17, 24, 39, 0.14);
       }
 
-      button:hover {
+      .actions button:hover {
         background: var(--accentHover);
         border-color: var(--accentHover);
         box-shadow: 0 10px 22px rgba(124, 58, 237, 0.22);
       }
 
-      button:active {
+      .actions button:active {
         transform: translateY(1px);
       }
 
-      button.secondary:hover {
+      .actions button.secondary:hover {
         background-color: rgba(124, 58, 237, 0.04);
         border-color: rgba(124, 58, 237, 0.35);
         box-shadow: 0 8px 18px rgba(17, 24, 39, 0.08);
       }
 
-      button:focus {
+      .actions button:focus {
         outline: none;
         box-shadow: 0 0 0 3px var(--accentSoftStrong);
       }
@@ -419,28 +490,36 @@
           </div>
         </div>
 
-        <div class="topDivider"></div>
+        <div class="sectionDivider"></div>
 
-        <div class="previewControl">
-          <div class="previewField">
-            <div class="label">Title</div>
-            <input
-              class="previewInput"
-              id="previewTitle"
-              type="text"
-              placeholder="Add preview title text"
-              autocomplete="off"
-            />
-          </div>
-          <div class="previewField">
-            <div class="label">Body</div>
-            <input
-              class="previewInput"
-              id="previewBody"
-              type="text"
-              placeholder="Add preview body text"
-              autocomplete="off"
-            />
+        <div class="previewToggleRow">
+          <button class="previewToggle" id="previewToggle" type="button" aria-expanded="false">
+            <span>Add preview text</span>
+          </button>
+        </div>
+
+        <div class="previewWrap" id="previewWrap">
+          <div class="previewControl" style="padding-top: 8px;">
+            <div class="previewField">
+              <div class="label">Title</div>
+              <input
+                class="previewInput"
+                id="previewTitle"
+                type="text"
+                placeholder="Add preview title text"
+                autocomplete="off"
+              />
+            </div>
+            <div class="previewField">
+              <div class="label">Body</div>
+              <input
+                class="previewInput"
+                id="previewBody"
+                type="text"
+                placeholder="Add preview body text"
+                autocomplete="off"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -618,6 +697,14 @@
           const target = e.target;
           if (target && target.closest && target.closest("details.ms")) return;
           allDetails.forEach((d) => (d.open = false));
+        });
+
+        // Preview text collapsible section
+        const previewToggle = document.getElementById("previewToggle");
+        const previewWrap = document.getElementById("previewWrap");
+        previewToggle.addEventListener("click", () => {
+          const isOpen = previewWrap.classList.toggle("open");
+          previewToggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
         });
 
         document.getElementById("previewTitle").addEventListener("input", (e) => {
@@ -907,21 +994,20 @@
                   <p class="previewBody" style="${bodyStyle}">
                     ${escapeHtml(previewBody)}
                   </p>
+                  <div class="tags previewTags">
+                    <span class="tag">${themeLabel(effectiveTheme(pair))}</span>
+                    ${
+                      effectiveAccessibility(pair) !== "none"
+                        ? `<span class="tag">${accessibilityLabel(effectiveAccessibility(pair))}</span>`
+                        : ""
+                    }
+                  </div>
                 </div>
+                <div class="tileDivider"></div>
                 <div class="meta">
-                  <div>
-                    <div class="names">
-                      <div class="nameRow"><span>Title</span><span>${pair.titleFont}</span></div>
-                      <div class="nameRow"><span>Body</span><span>${pair.bodyFont}</span></div>
-                    </div>
-                    <div class="tags">
-                      <span class="tag">${themeLabel(effectiveTheme(pair))}</span>
-                      ${
-                        effectiveAccessibility(pair) !== "none"
-                          ? `<span class="tag">${accessibilityLabel(effectiveAccessibility(pair))}</span>`
-                          : ""
-                      }
-                    </div>
+                  <div class="names">
+                    <div class="nameRow"><span>Title</span><span>${pair.titleFont}</span></div>
+                    <div class="nameRow"><span>Body</span><span>${pair.bodyFont}</span></div>
                   </div>
                   <div class="actions">
                     <button class="secondary" data-action="add" data-title="${titleAttr}" data-body="${bodyAttr}">Add to canvas</button>
