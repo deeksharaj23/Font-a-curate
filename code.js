@@ -224,6 +224,66 @@
       spacing: "variable",
       openSource: OS
     },
+    "Hanken Grotesk": {
+      family: "Hanken Grotesk",
+      category: "sans",
+      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      tone: "neutral",
+      bodyReadability: "high",
+      numerals: "clean",
+      spacing: "stable",
+      openSource: OS
+    },
+    "Plus Jakarta Sans": {
+      family: "Plus Jakarta Sans",
+      category: "sans",
+      weights: [200, 300, 400, 500, 600, 700, 800],
+      tone: "neutral",
+      bodyReadability: "high",
+      numerals: "clean",
+      spacing: "stable",
+      openSource: OS
+    },
+    Manrope: {
+      family: "Manrope",
+      category: "sans",
+      weights: [200, 300, 400, 500, 600, 700, 800],
+      tone: "neutral",
+      bodyReadability: "high",
+      numerals: "clean",
+      spacing: "stable",
+      openSource: OS
+    },
+    Urbanist: {
+      family: "Urbanist",
+      category: "sans",
+      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      tone: "neutral",
+      bodyReadability: "high",
+      numerals: "clean",
+      spacing: "stable",
+      openSource: OS
+    },
+    Sora: {
+      family: "Sora",
+      category: "sans",
+      weights: [100, 200, 300, 400, 500, 600, 700, 800],
+      tone: "neutral",
+      bodyReadability: "high",
+      numerals: "clean",
+      spacing: "stable",
+      openSource: OS
+    },
+    Outfit: {
+      family: "Outfit",
+      category: "sans",
+      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      tone: "neutral",
+      bodyReadability: "high",
+      numerals: "clean",
+      spacing: "stable",
+      openSource: OS
+    },
     // Serif body (editorial/luxury only)
     "Source Serif 4": {
       family: "Source Serif 4",
@@ -1495,6 +1555,160 @@
       readability: "medium",
       contrast: "high",
       theme: "playful",
+      accessibility: "none"
+    },
+    {
+      id: "ui-hankengrotesk-worksans",
+      titleFont: "Hanken Grotesk",
+      bodyFont: "Work Sans",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "low",
+      theme: "professional",
+      accessibility: "none"
+    },
+    {
+      id: "ui-hankengrotesk-sourcesans3",
+      titleFont: "Hanken Grotesk",
+      bodyFont: "Source Sans 3",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "low",
+      theme: "professional",
+      accessibility: "none"
+    },
+    {
+      id: "ui-hankengrotesk-ibmplexsans",
+      titleFont: "Hanken Grotesk",
+      bodyFont: "IBM Plex Sans",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "low",
+      theme: "professional",
+      accessibility: "none"
+    },
+    {
+      id: "ui-plusjakartasans-notosans",
+      titleFont: "Plus Jakarta Sans",
+      bodyFont: "Noto Sans",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "low",
+      theme: "modern",
+      accessibility: "none"
+    },
+    {
+      id: "ui-plusjakartasans-worksans",
+      titleFont: "Plus Jakarta Sans",
+      bodyFont: "Work Sans",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "low",
+      theme: "modern",
+      accessibility: "none"
+    },
+    {
+      id: "ui-manrope-sourcesans3",
+      titleFont: "Manrope",
+      bodyFont: "Source Sans 3",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "low",
+      theme: "modern",
+      accessibility: "none"
+    },
+    {
+      id: "ui-manrope-ibmplexsans",
+      titleFont: "Manrope",
+      bodyFont: "IBM Plex Sans",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "low",
+      theme: "modern",
+      accessibility: "none"
+    },
+    {
+      id: "saas-urbanist-worksans",
+      titleFont: "Urbanist",
+      bodyFont: "Work Sans",
+      structure: "sans-sans",
+      useCase: "saas",
+      readability: "high",
+      contrast: "medium",
+      theme: "modern",
+      accessibility: "none"
+    },
+    {
+      id: "saas-urbanist-sourcesans3",
+      titleFont: "Urbanist",
+      bodyFont: "Source Sans 3",
+      structure: "sans-sans",
+      useCase: "saas",
+      readability: "high",
+      contrast: "medium",
+      theme: "modern",
+      accessibility: "none"
+    },
+    {
+      id: "saas-sora-notosans",
+      titleFont: "Sora",
+      bodyFont: "Noto Sans",
+      structure: "sans-sans",
+      useCase: "saas",
+      readability: "high",
+      contrast: "medium",
+      theme: "modern",
+      accessibility: "none"
+    },
+    {
+      id: "saas-sora-ibmplexsans",
+      titleFont: "Sora",
+      bodyFont: "IBM Plex Sans",
+      structure: "sans-sans",
+      useCase: "saas",
+      readability: "high",
+      contrast: "medium",
+      theme: "modern",
+      accessibility: "none"
+    },
+    {
+      id: "branding-outfit-worksans",
+      titleFont: "Outfit",
+      bodyFont: "Work Sans",
+      structure: "sans-sans",
+      useCase: "branding",
+      readability: "high",
+      contrast: "medium",
+      theme: "modern",
+      accessibility: "none"
+    },
+    {
+      id: "branding-outfit-ibmplexsans",
+      titleFont: "Outfit",
+      bodyFont: "IBM Plex Sans",
+      structure: "sans-sans",
+      useCase: "branding",
+      readability: "high",
+      contrast: "medium",
+      theme: "modern",
+      accessibility: "none"
+    },
+    {
+      id: "ui-spacegrotesk-hankengrotesk",
+      titleFont: "Space Grotesk",
+      bodyFont: "Hanken Grotesk",
+      structure: "sans-sans",
+      useCase: "ui",
+      readability: "high",
+      contrast: "medium",
+      theme: "modern",
       accessibility: "none"
     }
   ];
